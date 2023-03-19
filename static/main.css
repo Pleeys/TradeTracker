@@ -1,81 +1,360 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 body {
-    background: #fafafa;
-    color: #333333;
-    margin-top: 5rem;
+  background-color: #232946;
+  }
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.container2 {
+  margin-right: auto;
+  margin-left: auto;
+  align-items: center;
+}
+.navbar{
+  background-color: #1A213D;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%; 
+  height: 10%; 
+  padding: 1rem; 
+  font-weight: bold;
+  text-align: center;
+}
+.navbar-link{
+  text-decoration: none; 
+  color: white; 
+  transition: color 0.3s; 
+}
+.navbar-link:hover {
+  color: #FF5F5C; 
+}
+.navbar-middle{
+  width: 20%;
+  font-size: 25px;
+  word-spacing: 1rem;
+  margin-top: 1%;
+}
+.navbar-right{
+  width: 70%; 
+  text-align: right;
+  font-size: 25px;
+  word-spacing: 1rem;
+  margin-right: 2.5%;
+  margin-top: 1%;
+}
+.trade_tracker_logo {
+  margin-top: 1%;
+}
+ .menu{
+  list-style: none;
+  font-size: 20px;
+} 
+ .menu a{
+  text-decoration: none;  
+  transition: color 0.3s;  
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+.menu a:hover{
+  color: white;
+} 
+
+/* sssssssssssssssssssssssss*/
+
+.user-img {
+  width: 50px;
+  border-radius: 100%;
+  border: 1px solid #232946;
+} 
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 80px;
+  background-color: #1A213D;
+  padding: 0.4rem 0.8rem;
+  transition: all 0.5s ease;
+}
+.sidebar.active ~ .main-content {
+  left: 250px;
+  width: calc(100% - 250px);
+}
+.sidebar.active {
+  width: 250px;
+}
+.sidebar #btn {
+  position: absolute;
+  color: white;
+  top: .4rem;
+  left: 50%;
+  font-size: 1.2rem;
+  line-height: 50px;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+.sidebar.active #btn {
+  left: 90%;
+}
+.sidebar .top .logo {
+  color: white;
+  display: flex;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+}
+.sidebar.active .top .logo {
+  opacity: 1;
+}
+.top .logo i {
+  font-size: 2rem;
+  margin-right: 5px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+.user p {
+  color: white;
+  opacity: 1;
+  margin-left: 1rem;
+}
+
+.bold {
+  font-weight: 600;
+}
+.sidebar p {
+  opacity: 0;
+}
+.sidebar.active p {
+  opacity: 1;
+}
+.sidebar ul li {
+  position: relative;
+  list-style-type: none;
+  height: 50px;
+  width: 90%;
+  margin: 0.8rem auto;
+  line-height: 50px;
+}
+.sidebar ul li a {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 0.8rem;
+}
+.sidebar ul li a:hover {
+  background-color: #FF5F5C;
+  color: #12171e;
+}
+.sidebar ul li a i {
+  min-width: 50px;
+  text-align: center;
+  height: 50px;
+  border-radius: 12px;
+  line-height: 50px;
+}
+.sidebar .nav-item {
+  opacity: 0;
+}
+.sidebar.active .nav-item {
+  opacity: 1;
+}
+.sidebar ul li .tooltip {
+  position: absolute;
+  left: 180px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
+  border-radius: .6rem;
+  padding: .4rem 1.2rem;  
+  line-height: 1.8rem;
+  z-index: 20;
+  opacity: 0;  
+}
+.sidebar ul li:hover .tooltip {
+  background-color: #FF5F5C;
+  opacity: 1;
+}
+.sidebar.active ul li .tooltip {
+  display: none;
+}
+.sidebar.active .logo {
+  opacity: 0;
+  animation-name: fade-in;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+}
+
+.trade_tracker_logo {
+  position: relative;
+  top: 0;
+  transition: all 0.5s ease;
+  width: calc(35% - 80px);
+  font-size: 30px;
+} 
+.trade_tracker_logo.active {
+    transform: translateX(120px);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+} 
+.messages{
+  display: solid;
+  height: 700px;
+  width: 900px;
+  float: right;
+  align-items: right;
+}  
+.messages-body{
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+.media {
+  font-size: 25px;
+  color: white;
+}
+.article-head {
+  border-bottom: 1px solid #FF5F5C;
+}
+.article-author {
+  color: #FF5F5C;
+  text-decoration: none; 
+}
+.content-section {
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding: 30px 30px;
+  margin-bottom: 20px;
+  color: white;
+  text-align: left;
+}
+ .form-group {
+  margin: 50px 50px;
+  font-size: 25px;
+} 
+ .form-head {
+  font-size: 30px;
+  text-align: center;
+}
+.form-control {
+  display: block;
+  width: 300px;
+  height: 30px;
+  border-radius: 30px;
+  float: right;
+  text-align: center;
+} 
+.form-bottom {
+  color: white;
+  height: 50px;
+  text-align: center;
+}
+.form-check {
+  margin-top: 50px;
+  font-size: 25px;
+  text-align: center;
+}
+#check{
+  height: 25px;
+  width: 25px;
+  margin-left: 30px;
+  margin-top: 10px;
+}
+.btn {
+  width: 150px;
+  height: 50px;
+  border-radius: 30px;
+  font-size: 25px;
+  float: right;
+  margin-right: 100px;
+}
+.form-link {
+  color: orange;
+  margin-left: 50px;
+}
+.form-link {
+  color: #FF5F5C;
+}
+.form-link:visited {
+  color: #FF5F5C;
+}
+.block-content {
+  top: 20%;
+  position: absolute;
+  height: 650px;
+  width: 900px;
+  background-color: #1A213D;
+  margin: 0;
+  padding: 0;
+}
+.alert {
+  display: inline-block;
+  color: white;
+  font-family: "Roboto";
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  top: 11%;
+  right: 30px;
+  height: 70px;
+
   }
   
-  h1, h2, h3, h4, h5, h6 {
-    color: #444444;
+  .alert-success {
+    animation-name: fade-out;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    display: flex;
+    background-color: #389838;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    border: 5px solid #14C762;
+    border-radius: 30px;
+    padding: 0 30px;
   }
   
-  .bg-steel {
-    background-color: #5f788a;
+  .alert-error {
+    animation-name: fade-out;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background-color: orangered;
+    align-items: center;
+    border: 5px solid #D32F2F;
+    border-radius: 30px;
+    padding: 0 30px;
   }
-  
-  .site-header .navbar-nav .nav-link {
-    color: #cbd5db;
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
-  
-  .site-header .navbar-nav .nav-link:hover {
-    color: #ffffff;
-  }
-  
-  .site-header .navbar-nav .nav-link.active {
-    font-weight: 500;
-  }
-  
-  .content-section {
-    background: #ffffff;
-    padding: 10px 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    margin-bottom: 20px;
-  }
-  
-  .article-title {
-    color: #444444;
-  }
-  
-  a.article-title:hover {
-    color: #428bca;
-    text-decoration: none;
-  }
-  
-  .article-content {
-    white-space: pre-line;
-  }
-  
-  .article-img {
-    height: 65px;
-    width: 65px;
-    margin-right: 16px;
-  }
-  
-  .article-metadata {
-    padding-bottom: 1px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #e3e3e3
-  }
-  
-  .article-metadata a:hover {
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .article-svg {
-    width: 25px;
-    height: 25px;
-    vertical-align: middle;
-  }
-  
-  .account-img {
-    height: 125px;
-    width: 125px;
-    margin-right: 20px;
-    margin-bottom: 16px;
-  }
-  
-  .account-heading {
-    font-size: 2.5rem;
-  }
-  

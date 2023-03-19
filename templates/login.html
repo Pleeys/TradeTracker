@@ -1,4 +1,45 @@
-{% extends "layout.html" %} 
+form-head{% extends "layout.html" %} 
 {% block content %}
-    <h1>About Page</h1>
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="form-head">Log In</legend>                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Enter Email"
+                    />      
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Enter Password"
+                    />       
+                </div>
+                <div class="form-check">
+                    Remember me<input type="checkbox" name="check" class="form-check" id="check">               
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <button type="submit" class="btn">Login</button>
+            </div>
+            <small class="form-group">
+                    <a href="#" class="form-link">Forgot Password?</a>       
+            </small>
+        </form>
+    </div>
+    <div class="form-bottom">
+        <small>
+            Need An Account? <a href="{{ url_for('register') }}" class="form-link">Sign Up Now</a>
+        </small>
+    </div>
 {% endblock content %}

@@ -1,8 +1,15 @@
 {% extends "layout.html" %} 
 {% block content %}
     {% for post in posts %}
-        <h1>{{ post.title }}</h1>
-        <p>By {{post.author}} on {{ post.date_posted }}</p>
-        <p>{{ post.content }}</p>
+        <article class="media">
+            <div class="media-body">
+                <div class="article-head">
+                    <a class="article-author" href="#">{{ post. author }}</a>
+                    <small class="article-date">{{ post.date_posted }}</small>
+                </div>
+                <h2><a class="article-title"> {{ post.title }}</a></h2>
+                <p class="article-content"> {{ post.content }}</p>
+            </div>
+        </article>
     {% endfor %}
 {% endblock content %}
