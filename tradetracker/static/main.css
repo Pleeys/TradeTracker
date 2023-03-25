@@ -264,8 +264,8 @@ body {
   width: 300px;
   height: 30px;
   border-radius: 30px;
-  float: right;
   text-align: center;
+  float: right;
 } 
 .form-bottom {
   color: white;
@@ -282,6 +282,9 @@ body {
   width: 25px;
   margin-left: 30px;
   margin-top: 10px;
+}
+#c-pass{
+  content: "Confirm Password";
 }
 .btn {
   width: 150px;
