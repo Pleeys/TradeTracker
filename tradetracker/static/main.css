@@ -361,3 +361,18 @@ body {
       opacity: 0;
     }
   }
+.account-img {
+  height: 125px;
+  width: 125px;
+  float: right;
+  margin-right: 150px;
+  margin-top: 50px;
+}
+.media-body {
+  padding-top: 50px;
+  align-items: center;
+  margin-left: 100px;
+}
+.form-control-file {
+  float: right;
+}
