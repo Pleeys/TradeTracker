@@ -2,12 +2,13 @@
 {% block content %}
     {% for post in posts %}
         <article class="media">
+            <img class="user-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
             <div class="media-body">
                 <div class="article-head">
-                    <a class="article-author" href="#">{{ post. author }}</a>
-                    <small class="article-date">{{ post.date_posted }}</small>
+                    <a class="article-author" href="#">{{ post.author.username}}</a>
+                    <small class="article-date">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
                 </div>
-                <h2><a class="article-title"> {{ post.title }}</a></h2>
+                <h2><a class="article-title" href="{{ url_for('post', post_id=post.id ) }}"> {{ post.title }}</a></h2>
                 <p class="article-content"> {{ post.content }}</p>
             </div>
         </article>

@@ -51,6 +51,10 @@ body {
   margin-right: 2.5%;
   margin-top: 1%;
 }
+.new_post {
+  margin-right: 40px;
+  word-spacing: 0;
+}
 .trade_tracker_logo {
   margin-top: 1%;
 }
@@ -277,7 +281,7 @@ body {
   font-size: 25px;
   text-align: center;
 }
-#check{
+.check{
   height: 25px;
   width: 25px;
   margin-left: 30px;
@@ -375,4 +379,25 @@ body {
 }
 .form-control-file {
   float: right;
+}
+.content {
+  width: 400px;
+  height: 150px;
+  float: right;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  margin-right: 20%;
+}
+.content-title {
+  margin-left: 40%;
+  margin-top: 100px;
+  margin-right: 20%;
+}
+.post-title {
+  margin-left: 100px;
+}
+.post-links {
+  text-decoration: none; 
+  color: white; 
+  transition: color 0.3s; 
 }
