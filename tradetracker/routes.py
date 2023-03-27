@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from tradetracker import app, db, bcrypt
-from tradetracker.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from tradetracker.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, PortfolioForm
 from tradetracker.models import User, Post, Stock
 from flask_login import login_user, current_user, logout_user, login_required
 from bs4 import BeautifulSoup 
@@ -11,6 +11,11 @@ import requests
 import re
 import csv
 import pandas as pd
+from datetime import datetime
+from yahooquery import Ticker
+import yfinance as yf
+import pandas_datareader as web
+import matplotlib.pyplot as plt
 
 
 @app.route('/')
@@ -199,7 +204,7 @@ def earnings():
     df = pd.DataFrame(earnings_list[1:], columns=earnings_list[0])
 
     
-    return render_template('earnings.html', earnings_list=earnings_list, df=df)
+    return render_template('earnings.html', earnings_list=earnings_list, df=df, title='Earnings')
 
 @app.route('/download_earnings')
 def download_earnings():
@@ -215,6 +220,7 @@ def download_earnings():
 def portfolio(username):
     user = User.query.filter_by(username=username).first()
     stock = Stock.query.filter_by(user_id=user.id).first()
+    
     if user and stock is not None:
         stocks = Stock.query.filter_by(user_id=user.id).all()
         tickers = [stock.ticker for stock in stocks]
@@ -223,4 +229,20 @@ def portfolio(username):
         stocks = []
         tickers = []
         amounts = []
-    return render_template('portfolio.html', username=username, tickers=tickers, amounts=amounts)
+        prices = []
+        total = []
+    form = PortfolioForm()
+    if form.validate_on_submit():
+        stock = Stock(ticker=form.ticker.data, amount=form.amount.data)
+        db.session.add(stock)
+        db.session.commit()
+        
+    for ticker in tickers:
+        ticker_value = yf.Ticker(ticker)
+        stockinfo = ticker_value.fast_info
+        last_price = round(stockinfo['lastPrice'],2)
+        prices.append(last_price)
+        index = tickers.index(ticker)
+        total.append(last_price*amounts[index])
+    
+    return render_template('portfolio.html', username=username, tickers=tickers, amounts=amounts, total=total, prices=prices, form=form, title='Portfolio')

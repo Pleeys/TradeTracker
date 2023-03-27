@@ -1,5 +1,25 @@
-{% extends "layout.html" %} 
+{% extends "layout.html" %}
+<div class="graph">
+    
+</div> 
 {% block content %}
-    
-    
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="form-head">Add Your Stocks Here!</legend>
+                <div class="form-group">
+                    {{ form.ticker.label(class="form-control-label") }}   
+                    {{ form.ticker(class="form-control", placeholder="Enter Ticker") }}                      
+                </div>
+                <div class="form-group">
+                    {{ form.amount.label(class="form-control-label") }}   
+                    {{ form.amount(class="form-control", placeholder="Enter Amount") }}   
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn") }}
+            </div>
+        </form>
+    </div>
 {% endblock %}

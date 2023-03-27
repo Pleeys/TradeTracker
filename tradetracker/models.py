@@ -28,7 +28,9 @@ class Post(db.Model):
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    stock = db.Column(db.String(100), nullable=False)
     ticker = db.Column(db.String(4), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Ticker'{self.ticker}', '{self.amount}')"
