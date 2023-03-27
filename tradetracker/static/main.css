@@ -89,6 +89,7 @@ body {
   background-color: #1A213D;
   padding: 0.4rem 0.8rem;
   transition: all 0.5s ease;
+  color: white;
 }
 .sidebar.active ~ .main-content {
   left: 250px;
@@ -486,4 +487,20 @@ body {
 .posts_by {
   color: white;
   margin-left: 250px;
+}
+.earnings_list {
+  color: white;
+}
+.earnings-table {
+  color: white;
+}
+td, th {
+  border: 1px solid #232946;
+}
+.earnings-elements {
+  background-color: #1A213D;
+  text-align: center;
+}
+#earnings-download {
+  font-size: 30px;
 }

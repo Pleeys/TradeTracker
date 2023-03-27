@@ -4,8 +4,14 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from tradetracker import app, db, bcrypt
 from tradetracker.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from tradetracker.models import User, Post
+from tradetracker.models import User, Post, Stock
 from flask_login import login_user, current_user, logout_user, login_required
+from bs4 import BeautifulSoup 
+import requests
+import re
+import csv
+import pandas as pd
+
 
 @app.route('/')
 @app.route('/home')
@@ -149,3 +155,72 @@ def user_posts(username):
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=3)
     return render_template('user_posts.html',posts=posts, user=user)
+
+@app.route('/earnings')
+def earnings():
+    source = requests.get('https://www.earningswhispers.com/calendar')
+    soup = BeautifulSoup(source.content, 'lxml')
+
+    espcalendar = soup.find('ul', id='epscalendar')
+
+    companies_html = soup.findAll('div', class_='company')
+    tickers_html = soup.findAll('div', class_='ticker')
+    times_html = soup.findAll('div', class_='time')
+    revenue_growths_html = soup.findAll('div', class_='revgrowthprint')
+    earnings_growths_html = soup.findAll('div', class_='growth')
+
+    companies = ['Company name']
+    tickers = ['Ticker']
+    times = ['Time']
+    revenue_growths = ['Expected Revenue Growth']
+    earnings_growths = ['Expected Earnings Growth']
+
+    for company in companies_html:
+        companies.append(company.text)
+
+    for ticker in tickers_html:
+        tickers.append(ticker.text)
+
+    for time in times_html:
+        times.append(time.text)
+
+    for revenue_growth in revenue_growths_html:
+        revenue_growths.append(revenue_growth.text)
+
+    for earning in earnings_growths_html:
+        earning_script = earning.find('script', string=lambda text: text and 'showepsgrowth' in text)
+        if earning_script:
+            earning_text = re.search(r'showepsgrowth\("[^"]*",\s*"([^"]*)"\);', earning_script.string)
+            if earning_text:
+                earnings_growths.append(earning_text.group(1))
+
+    earnings_list = list(zip(companies, tickers, times, revenue_growths, earnings_growths))
+
+    df = pd.DataFrame(earnings_list[1:], columns=earnings_list[0])
+
+    
+    return render_template('earnings.html', earnings_list=earnings_list, df=df)
+
+@app.route('/download_earnings')
+def download_earnings():
+    earnings_list = earnings()
+    filename = 'earnings.csv'
+    with open(filename, 'w') as f:
+        writer = csv.writer(f, delimiter='|')
+        writer.writerows(earnings_list)
+        flash('The earnings data has been downloaded and saved as a CSV file!', 'success')
+    return redirect(url_for('earnings'))
+
+@app.route('/portfolio/<string:username>')
+def portfolio(username):
+    user = User.query.filter_by(username=username).first()
+    stock = Stock.query.filter_by(user_id=user.id).first()
+    if user and stock is not None:
+        stocks = Stock.query.filter_by(user_id=user.id).all()
+        tickers = [stock.ticker for stock in stocks]
+        amounts = [stock.amount for stock in stocks]
+    else:
+        stocks = []
+        tickers = []
+        amounts = []
+    return render_template('portfolio.html', username=username, tickers=tickers, amounts=amounts)

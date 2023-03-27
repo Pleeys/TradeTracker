@@ -25,4 +25,10 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post'{self.title}', '{self.date_posted}')"
-    
+
+class Stock(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    stock = db.Column(db.String(100), nullable=False)
+    ticker = db.Column(db.String(4), nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

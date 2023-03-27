@@ -1,0 +1,27 @@
+{% extends "layout.html" %} 
+{% block content %}
+    <div class="earnings-elements">
+        <table class="earnings-table">
+            <thead>
+                <tr class="earnings-tr">
+                    <th>Company name</th>
+                    <th>Ticker</th>
+                    <th>Time</th>
+                    <th>Expected Revenue Growth</th>
+                    <th>Expected Earnings Growth</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in df.values %}
+                <tr class="earnings-tr">
+                    {% for value in row %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a class="post-links" id="earnings-download" href="{{ url_for('download_earnings') }}">Download Earnings </a>
+    </div>
+    
+{% endblock %}

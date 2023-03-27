@@ -51,63 +51,36 @@
             {% endif %}            
           </div>
           <ul>
+            {% if current_user.is_authenticated %}
               <li>
-                  <a href="#">
-                      <i class="bx bxs-grid-alt"></i>
-                      <span class="nav-item">Dashboard</span>
+                  <a href="{{ url_for('portfolio', username=current_user.username) }}">
+                    <i class='bx bx-wallet'></i>
+                    <span class="nav-item">Portfolio</span>
                   </a>
-                  <span class="tooltip">Dashboard</span>
+                  <span class="tooltip">Portfolio</span>
               </li>
+            {% endif %}
               <li>
                   <a href="#">
-                      <i class="bx bxs-shopping-bag"></i>
-                      <span class="nav-item">Products</span>
+                    <i class="bx bxs-shopping-bag"></i>
+                    <span class="nav-item">Products</span>
                   </a>
                   <span class="tooltip">Products</span>
               </li>
               <li>
                   <a href="#">
-                      <i class="bx bx-list-check"></i>
-                      <span class="nav-item">Categories</span>
+                    <i class="bx bx-list-check"></i>
+                    <span class="nav-item">Categories</span>
                   </a>
                   <span class="tooltip">Categories</span>
               </li>
               <li>
-                  <a href="#">
+                  <a href="{{ url_for('earnings') }}">
                       <i class="bx bxs-food-menu"></i>
-                      <span class="nav-item">Orders</span>
+                      <span class="nav-item">Earnings</span>
                   </a>
-                  <span class="tooltip">Orders</span>
+                  <span class="tooltip">Earnings</span>
               </li>
-              <li>
-                  <a href="#">
-                      <i class="bx bx-body"></i>
-                      <span class="nav-item">Customers</span>
-                  </a>
-                  <span class="tooltip">Customers</span>
-              </li>
-              <li>
-                  <a href="#">
-                      <i class="bx bx-location-plus"></i>
-                      <span class="nav-item">Shipping</span>
-                  </a>
-                  <span class="tooltip">Shipping</span>
-              </li>
-              <li>
-                  <a href="#">
-                      <i class="bx bx-cog"></i>
-                      <span class="nav-item">Settings</span>
-                  </a>
-                  <span class="tooltip">Settings</span>
-              </li>
-              <li>
-                  <a href="#">
-                      <i class="bx bxs-log-out"></i>
-                      <span class="nav-item">Logout</span>
-                  </a>
-                  <span class="tooltip">Logout</span>
-              </li>
-          </ul>
       </div>
         <div class="alert">         
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -128,6 +101,6 @@
           </div>      
         </div>
       </main>  
-      <script src="static/script.js"></script>
+      <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
