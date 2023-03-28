@@ -282,13 +282,14 @@ def portfolio(username):
             else:
                 ticker_labels.append(stock.ticker)
                 ticker_amounts.append(stock.amount)
+
                 
-                pieData.append(stock.ticker)
     else: 
         df = []
         
     colors = sns.color_palette("pastel",len(ticker_labels)).as_hex()
-
+    for i in range(len(ticker_labels)):
+        pieData.append({'value': stock.amount, 'color': colors[i]})
     print(ticker_labels)
     print(ticker_amounts)
     print(colors)

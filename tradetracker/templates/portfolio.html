@@ -5,18 +5,12 @@
     <canvas id="graph" width="600" height="400"></canvas>
     <script>
         
-        var pieData = [];
+        var pieDataJS = {{ pieData|tojson }};
 
-        {% for i in range(ticker_labels|length) %}
-            let newData = { 'value': '{{ ticker_labels[i] }}', 'color': '{{ colors[i] }}' };
-            {{ newData }}
-            pieData.push(newData.value);
-            {{ pieData }}
-        {% endfor %}
-
+       
         // Get the context of the canvas element we want to select
         var graph= document.getElementById("graph").getContext("2d");
-        new Chart(graph).Pie(pieData);
+        new Chart(graph).Pie(pieDataJS);
     </script>
 {% endblock %}
 {% block content %}
