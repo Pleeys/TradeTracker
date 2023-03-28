@@ -31,6 +31,7 @@ class Stock(db.Model):
     ticker = db.Column(db.String(4), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"Ticker'{self.ticker}', '{self.amount}')"

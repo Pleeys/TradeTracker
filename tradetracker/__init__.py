@@ -20,5 +20,5 @@ def create_database():
             return
         db.create_all()
         print('Created Database!')
-
+            
 create_database()

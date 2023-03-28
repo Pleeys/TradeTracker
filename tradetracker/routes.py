@@ -16,14 +16,17 @@ from yahooquery import Ticker
 import yfinance as yf
 import pandas_datareader as web
 import matplotlib.pyplot as plt
+import random
+import seaborn as sns
+import itertools
 
 
 @app.route('/')
 @app.route('/home')
 def home():
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=3)
-    return render_template('home.html',posts=posts)
+        page = request.args.get('page', 1, type=int)
+        posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=3)
+        return render_template('home.html',posts=posts)
 
 @app.route('/about')
 def about():
@@ -216,33 +219,78 @@ def download_earnings():
         flash('The earnings data has been downloaded and saved as a CSV file!', 'success')
     return redirect(url_for('earnings'))
 
-@app.route('/portfolio/<string:username>')
+def generate_random_colors(num_colors):
+    colors = []
+    for i in range(num_colors):
+        color = [random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]
+        colors.append('rgba({}, {}, {}, 0.2)'.format(*color))
+        colors.append('rgba({}, {}, {}, 1)'.format(*color))
+    return colors
+
+@app.route('/portfolio/<string:username>', methods=['GET','POST'])
+@login_required
 def portfolio(username):
+    if username != current_user.username:
+        abort(403)
     user = User.query.filter_by(username=username).first()
     stock = Stock.query.filter_by(user_id=user.id).first()
-    
-    if user and stock is not None:
+    if stock is not None:
         stocks = Stock.query.filter_by(user_id=user.id).all()
         tickers = [stock.ticker for stock in stocks]
         amounts = [stock.amount for stock in stocks]
+        dates = [stock.date_posted.strftime('%Y-%m-%d') for stock in stocks]
+        prices = []
+        total = []   
     else:
-        stocks = []
         tickers = []
         amounts = []
         prices = []
         total = []
+        dates = []
     form = PortfolioForm()
-    if form.validate_on_submit():
-        stock = Stock(ticker=form.ticker.data, amount=form.amount.data)
-        db.session.add(stock)
+    if form.validate_on_submit():      
+        add_stock = Stock(ticker=form.ticker.data, amount=form.amount.data, user_id=user.id)
+        dates.append(add_stock.date_posted)
+        db.session.add(add_stock)
         db.session.commit()
+        flash('The stock has been added!', 'success')
+        return(redirect(url_for('portfolio', username=current_user.username)))
         
+    
     for ticker in tickers:
         ticker_value = yf.Ticker(ticker)
         stockinfo = ticker_value.fast_info
         last_price = round(stockinfo['lastPrice'],2)
         prices.append(last_price)
         index = tickers.index(ticker)
-        total.append(last_price*amounts[index])
+        total_round = round(last_price*amounts[index],2)
+        total.append(total_round)
+
+    porftolio_stocks=list(zip(tickers, amounts, prices, total, dates))
     
-    return render_template('portfolio.html', username=username, tickers=tickers, amounts=amounts, total=total, prices=prices, form=form, title='Portfolio')
+    ticker_labels = []
+    ticker_amounts = []
+    colors = []
+    pieData = []
+    if stock is not None:
+        df = pd.DataFrame(porftolio_stocks[0:], columns=porftolio_stocks[0])
+        same_stocks = Stock.query.filter_by(user_id=user.id).all()
+        for stock in same_stocks:        
+            if stock.ticker in ticker_labels:
+                index = ticker_labels.index(stock.ticker)
+                ticker_amounts[index] += stock.amount
+            else:
+                ticker_labels.append(stock.ticker)
+                ticker_amounts.append(stock.amount)
+                
+                pieData.append(stock.ticker)
+    else: 
+        df = []
+        
+    colors = sns.color_palette("pastel",len(ticker_labels)).as_hex()
+
+    print(ticker_labels)
+    print(ticker_amounts)
+    print(colors)
+    return render_template('portfolio.html',colors=colors, pieData=pieData, df=df, username=username, dates=dates, tickers=tickers, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, amounts=amounts, total=total, prices=prices, form=form, title='Portfolio')
+

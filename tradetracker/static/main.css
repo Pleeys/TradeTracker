@@ -504,3 +504,57 @@ td, th {
 #earnings-download {
   font-size: 30px;
 }
+
+.stock-elements {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: #232946;
+  height: 40%;
+  width: 60%;
+  color: white;
+  text-align: center;
+  overflow: auto; 
+  max-height: 400px; 
+}
+.stock-elements h1{
+  text-align: center;
+}
+.stock-table {
+  margin: 10px;
+  table-layout: fixed;
+}
+.stock-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.earnings-tr {
+  background-color: #1A213D;
+}
+.stock-elements tr td {
+  background-color: #1A213D;
+}
+.stock-elements th, td {
+  padding: 10px;
+}
+#chart {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+}
+.seconadry-block-conent {
+  color: white;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 650px;
+  width: 700px;
+  background-color: #1A213D;
+  margin: 10%;
+}
+.seconadry-block-conent h1 {
+  margin: 0;
+}

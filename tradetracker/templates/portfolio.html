@@ -1,7 +1,24 @@
 {% extends "layout.html" %}
-<div class="graph">
-    
-</div> 
+{% block secondcontent %}
+    <h1>Your Portfolio!</h1>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+    <canvas id="graph" width="600" height="400"></canvas>
+    <script>
+        
+        var pieData = [];
+
+        {% for i in range(ticker_labels|length) %}
+            let newData = { 'value': '{{ ticker_labels[i] }}', 'color': '{{ colors[i] }}' };
+            {{ newData }}
+            pieData.push(newData.value);
+            {{ pieData }}
+        {% endfor %}
+
+        // Get the context of the canvas element we want to select
+        var graph= document.getElementById("graph").getContext("2d");
+        new Chart(graph).Pie(pieData);
+    </script>
+{% endblock %}
 {% block content %}
     <div class="content-section">
         <form method="POST" action="">
@@ -21,5 +38,28 @@
                 {{ form.submit(class="btn") }}
             </div>
         </form>
+        <div class="stock-elements">
+            <h1>Stocks history</h1>
+            <table class="stock-table">
+                <thead>
+                    <tr class="stock-tr">
+                        <th>Ticker</th>
+                        <th>Amount</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in df.values %}
+                    <tr class="stock-tr">
+                        {% for value in row %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
