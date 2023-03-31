@@ -238,9 +238,12 @@ def portfolio(username):
         stocks = Stock.query.filter_by(user_id=user.id).all()
         tickers = [stock.ticker for stock in stocks]
         amounts = [stock.amount for stock in stocks]
+        t_a = dict(zip(tickers, amounts))
         dates = [stock.date_posted.strftime('%Y-%m-%d') for stock in stocks]
         prices = []
-        total = []   
+        total = [] 
+        print(tickers)  
+        print(amounts)
     else:
         tickers = []
         amounts = []
@@ -257,42 +260,43 @@ def portfolio(username):
         return(redirect(url_for('portfolio', username=current_user.username)))
         
     
-    for ticker in tickers:
-        ticker_value = yf.Ticker(ticker)
+    for i in range(len(tickers)):     
+        ticker_value = yf.Ticker(tickers[i])
         stockinfo = ticker_value.fast_info
         last_price = round(stockinfo['lastPrice'],2)
         prices.append(last_price)
-        index = tickers.index(ticker)
-        total_round = round(last_price*amounts[index],2)
+        amount = amounts[i]
+        total_round = round(last_price*amount,2)
         total.append(total_round)
+
 
     porftolio_stocks=list(zip(tickers, amounts, prices, total, dates))
     
     ticker_labels = []
     ticker_amounts = []
-    colors = []
     pieData = []
+    ticker_id = []
     if stock is not None:
         df = pd.DataFrame(porftolio_stocks[0:], columns=porftolio_stocks[0])
         same_stocks = Stock.query.filter_by(user_id=user.id).all()
 
-        for stock in same_stocks:        
+        for stock in same_stocks:       
+            ticker_id.append(stock.id) 
             if stock.ticker in ticker_labels:
                 index = ticker_labels.index(stock.ticker)
                 ticker_amounts[index] += stock.amount
             else:
                 ticker_labels.append(stock.ticker)
                 ticker_amounts.append(stock.amount)
+                
 
                 
     else: 
         df = []
         
-    colors = sns.color_palette("pastel",len(ticker_labels)).as_hex()
-    for i in range(len(ticker_labels)):
-        pieData.append({'value': stock.amount, 'color': colors[i]})
+  
     print(ticker_labels)
     print(ticker_amounts)
-    print(colors)
-    return render_template('portfolio.html',colors=colors, pieData=pieData, df=df, username=username, dates=dates, tickers=tickers, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, amounts=amounts, total=total, prices=prices, same_stocks=same_stocks, form=form, title='Portfolio')
+    print(ticker_id)
+    return render_template('portfolio.html', pieData=pieData, df=df, username=username, same_stocks=same_stocks, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, ticker_id=ticker_id, form=form, title='Portfolio')
 

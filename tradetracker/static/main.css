@@ -560,7 +560,7 @@ td, th {
 .graph h1{
   margin-bottom: 70px;
 }
-#delete-stock:hover {
+.delete-stock:hover {
   background-color: red;
   cursor: pointer;
 }

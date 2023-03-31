@@ -57,12 +57,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in df.values %}
+                    {% for index, row in df.iterrows() %}
                     <tr class="stock-tr">
                         {% for value in row %}
                         <td>{{ value }}</td>
                         {% endfor %}
-                        <td><i class='bx bx-x' id='{{ same_stocks.id }}'></i></td>
+                        <td><i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i></td>
                     </tr>
                     {% endfor %}
                 </tbody>
