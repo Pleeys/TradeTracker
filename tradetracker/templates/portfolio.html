@@ -62,7 +62,13 @@
                         {% for value in row %}
                         <td>{{ value }}</td>
                         {% endfor %}
-                        <td><i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i></td>
+                        <form action="{{ url_for('delete_stock', ticker_id = ticker_id[index]) }}" method="POST">
+                            <td>
+                                <button type="submit" class="delete-btn">
+                                    <i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i>
+                                </button>
+                            </td>
+                        </form>
                     </tr>
                     {% endfor %}
                 </tbody>

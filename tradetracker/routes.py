@@ -300,3 +300,13 @@ def portfolio(username):
     print(ticker_id)
     return render_template('portfolio.html', pieData=pieData, df=df, username=username, same_stocks=same_stocks, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, ticker_id=ticker_id, form=form, title='Portfolio')
 
+@app.route("/portfolio/<int:ticker_id>/delete", methods=['POST'])
+@login_required
+def delete_stock(ticker_id):
+    stock = Stock.query.get_or_404(ticker_id)
+    if stock.user_id != current_user.id:
+        abort(403)
+    db.session.delete(stock)
+    db.session.commit()
+    flash('Your stock has been deleted!', 'success')
+    return(redirect(url_for('portfolio', username=current_user.username)))

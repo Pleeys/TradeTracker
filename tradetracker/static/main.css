@@ -304,6 +304,13 @@ body {
   float: right;
   width: 50%;
 }
+.delete-btn {
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: white;
+  float: right;
+}
 #delete-btn:hover {
   cursor: pointer;
   color: #FF5F5C;
