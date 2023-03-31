@@ -275,6 +275,7 @@ def portfolio(username):
     if stock is not None:
         df = pd.DataFrame(porftolio_stocks[0:], columns=porftolio_stocks[0])
         same_stocks = Stock.query.filter_by(user_id=user.id).all()
+
         for stock in same_stocks:        
             if stock.ticker in ticker_labels:
                 index = ticker_labels.index(stock.ticker)
@@ -293,5 +294,5 @@ def portfolio(username):
     print(ticker_labels)
     print(ticker_amounts)
     print(colors)
-    return render_template('portfolio.html',colors=colors, pieData=pieData, df=df, username=username, dates=dates, tickers=tickers, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, amounts=amounts, total=total, prices=prices, form=form, title='Portfolio')
+    return render_template('portfolio.html',colors=colors, pieData=pieData, df=df, username=username, dates=dates, tickers=tickers, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, amounts=amounts, total=total, prices=prices, same_stocks=same_stocks, form=form, title='Portfolio')
 

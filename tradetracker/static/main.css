@@ -536,12 +536,7 @@ td, th {
   background-color: #1A213D;
 }
 .stock-elements th, td {
-  padding: 10px;
-}
-#chart {
-  width: 300px;
-  height: 300px;
-  margin: auto;
+  padding: 5px;
 }
 .seconadry-block-conent {
   color: white;
@@ -556,11 +551,19 @@ td, th {
   margin: 10%;
 }
 .seconadry-block-conent h1 {
-  margin: 0;
+  margin-top: 0;
 }
 .portfolio-second-block {
   height: 100%;
   width: 100%;
-  
-
+}
+.graph h1{
+  margin-bottom: 70px;
+}
+#delete-stock:hover {
+  background-color: red;
+  cursor: pointer;
+}
+#myChart {
+  margin-bottom: 50px;
 }

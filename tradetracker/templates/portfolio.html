@@ -1,17 +1,29 @@
 {% extends "layout.html" %}
 {% block secondcontent %}
-    <h1>Your Portfolio!</h1>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
-    <canvas id="graph" width="600" height="400"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="graph">  
+        <h1>My Stocks and Shares!</h1>
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
     <script>
-        
-        var pieDataJS = {{ pieData|tojson }};
-
-       
-        // Get the context of the canvas element we want to select
-        var graph= document.getElementById("graph").getContext("2d");
-        new Chart(graph).Pie(pieDataJS);
-    </script>
+        const ctx = document.getElementById('myChart');
+      
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: {{ ticker_labels|tojson}},
+            datasets: [{
+              label: 'Number of shares',
+              data: {{ ticker_amounts|tojson}},
+            }]
+          },
+          options: {
+            animation: {
+            duration: 2000,
+            easing: 'easeOutBounce'
+            }
+          }});
+      </script>
 {% endblock %}
 {% block content %}
     <div class="content-section">
@@ -50,6 +62,7 @@
                         {% for value in row %}
                         <td>{{ value }}</td>
                         {% endfor %}
+                        <td><i class='bx bx-x' id='{{ same_stocks.id }}'></i></td>
                     </tr>
                     {% endfor %}
                 </tbody>
