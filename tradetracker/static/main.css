@@ -513,6 +513,7 @@ td, th {
 }
 
 .stock-elements {
+  position: relative;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -573,4 +574,22 @@ td, th {
 }
 #myChart {
   margin-bottom: 50px;
+}
+
+.history {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(-50%, 50%);
+  cursor: pointer;
+}
+.stock-history {
+  display: none;
+}
+.stock-overview h2 {
+  color: #14C762;
+  padding: 10px;
+}
+.stock-overview {
+  display: block;
 }

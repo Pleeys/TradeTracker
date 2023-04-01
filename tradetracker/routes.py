@@ -18,8 +18,7 @@ import pandas_datareader as web
 import matplotlib.pyplot as plt
 import random
 import seaborn as sns
-import itertools
-
+from functools import reduce
 
 @app.route('/')
 @app.route('/home')
@@ -271,34 +270,43 @@ def portfolio(username):
 
 
     porftolio_stocks=list(zip(tickers, amounts, prices, total, dates))
-    
     ticker_labels = []
     ticker_amounts = []
     pieData = []
     ticker_id = []
+    total_prices = []
     if stock is not None:
         df = pd.DataFrame(porftolio_stocks[0:], columns=porftolio_stocks[0])
         same_stocks = Stock.query.filter_by(user_id=user.id).all()
 
         for stock in same_stocks:       
             ticker_id.append(stock.id) 
+            ticker_value = yf.Ticker(stock.ticker)
+            stockinfo = ticker_value.fast_info
+            last_price = round(stockinfo['lastPrice'],2)
             if stock.ticker in ticker_labels:
                 index = ticker_labels.index(stock.ticker)
                 ticker_amounts[index] += stock.amount
+                total_prices[index] += round(stock.amount*last_price,2)
             else:
                 ticker_labels.append(stock.ticker)
                 ticker_amounts.append(stock.amount)
+                total_prices.append(round(stock.amount*last_price,2))
                 
+                
+            
+        overview = list(zip(ticker_labels, ticker_amounts, total_prices))
+        df_overview = pd.DataFrame(overview[0:], columns=overview[0])
 
+        summary = reduce(lambda acc, val: acc + val, total_prices)
                 
     else: 
-        df = []
-        
-  
-    print(ticker_labels)
-    print(ticker_amounts)
-    print(ticker_id)
-    return render_template('portfolio.html', pieData=pieData, df=df, username=username, same_stocks=same_stocks, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, ticker_id=ticker_id, form=form, title='Portfolio')
+        overview = list(zip(ticker_labels, ticker_amounts, total_prices))
+        df = pd.DataFrame(porftolio_stocks, columns=['Ticker', 'Amount', 'Price', 'Total', 'Date'])
+        df_overview = pd.DataFrame(overview, columns=['Ticker', 'Amount', 'Total'])
+        summary = 0
+
+    return render_template('portfolio.html', summary=summary, df_overview=df_overview, pieData=pieData, df=df, username=username, ticker_labels=ticker_labels, ticker_amounts=ticker_amounts, ticker_id=ticker_id, form=form, title='Portfolio')
 
 @app.route("/portfolio/<int:ticker_id>/delete", methods=['POST'])
 @login_required

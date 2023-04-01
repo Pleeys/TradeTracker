@@ -1,11 +1,16 @@
 {% extends "layout.html" %}
 {% block secondcontent %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" 
+    integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <div class="graph">  
         <h1>My Stocks and Shares!</h1>
         <canvas id="myChart" width="400" height="200"></canvas>
     </div>
     <script>
+        Chart.register(ChartDataLabels);
         const ctx = document.getElementById('myChart');
       
         new Chart(ctx, {
@@ -16,13 +21,41 @@
               label: 'Number of shares',
               data: {{ ticker_amounts|tojson}},
             }]
-          },
-          options: {
-            animation: {
-            duration: 2000,
-            easing: 'easeOutBounce'
+            },
+            options: {
+                animation: {
+                duration: 2000,
+                easing: 'easeOutBounce'
+                },
+                plugins: {
+                    tooltip: {
+                        enabled: false
+                    },
+                    datalabels: {
+                        formatter: (value, context) => {
+                            const totalShares = context.chart.data.datasets[0].data.reduce((acc, val) => acc + val);
+                            const percentage = Math.round((value / totalShares) * 100);
+                            return percentage + '%';
+                        },
+                        color: 'white',
+                        font: {
+                            size: 32,
+                            weight: 'bold'
+                        },
+                    },
+                    legend: {
+                    position: 'bottom',
+                    display: true,
+                    labels: {
+                        color: 'white',
+                        font: {
+                            size: 16,
+                        }
+                    }
+                    },                   
+                }
             }
-          }});
+        });
       </script>
 {% endblock %}
 {% block content %}
@@ -45,34 +78,78 @@
             </div>
         </form>
         <div class="stock-elements">
-            <h1>Stocks history</h1>
-            <table class="stock-table">
-                <thead>
-                    <tr class="stock-tr">
-                        <th>Ticker</th>
-                        <th>Amount</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for index, row in df.iterrows() %}
-                    <tr class="stock-tr">
-                        {% for value in row %}
-                        <td>{{ value }}</td>
-                        {% endfor %}
-                        <form action="{{ url_for('delete_stock', ticker_id = ticker_id[index]) }}" method="POST">
+            <div class="stock-overview">
+                <h1>Stocks Overview</h1>
+                    <i class='bx bx-history history' id="click-history"></i>
+                <h2>Total: {{ summary }} $</h2>
+                <table class="stock-table">
+                    <thead>
+                        <tr class="stock-tr">
+                            <th>Ticker</th>
+                            <th>Amount</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for index, row in df_overview.iterrows() %}
+                        <tr class="stock-tr">
+                            {% for value in row %}
+                            <td>{{ value }}</td>
+                            {% endfor %} 
                             <td>
-                                <button type="submit" class="delete-btn">
-                                    <i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i>
-                                </button>
+                                <i class='bx bx-dollar' ></i>
                             </td>
-                        </form>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="stock-history">
+                <h1>Stocks history</h1>
+                    <i class='bx bx-dollar-circle history' id="click-overview"></i>
+                <table class="stock-table">
+                    <thead>
+                        <tr class="stock-tr">
+                            <th>Ticker</th>
+                            <th>Amount</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for index, row in df.iterrows() %}
+                        <tr class="stock-tr">
+                            {% for value in row %}
+                            <td>{{ value }}</td>
+                            {% endfor %}
+                            <form action="{{ url_for('delete_stock', ticker_id = ticker_id[index]) }}" method="POST">
+                                <td>
+                                    <button type="submit" class="delete-btn">
+                                        <i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i>
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    <script>
+            const clickHistory = document.getElementById("click-history");
+            var stockHistory = document.querySelector(".stock-history");
+            var stockOverview = document.querySelector(".stock-overview");
+            clickHistory.addEventListener("click", function() {
+                stockOverview.style.display = 'none';
+                stockHistory.style.display = 'block';
+            })
+            const clickOverview = document.getElementById("click-overview");
+            clickOverview.addEventListener("click", function() {
+                stockHistory.style.display = 'none';
+                stockOverview.style.display = 'block';
+            })
+
+    </script>
 {% endblock %}
