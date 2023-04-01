@@ -68,3 +68,22 @@ class PortfolioForm(FlaskForm):
     ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=4)])
     amount = IntegerField('Amount', validators=[DataRequired(), NumberRange(min=0, message="Value must be non-negative")])
     submit = SubmitField('Add')
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email',
+                            validators=[DataRequired(), Email()])
+    submit = SubmitField('Reset')
+    
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()   
+        if user is None:
+            flash('There is no account with that email. You must register first!', 'error')
+            raise ValidationError()
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', 
+                            validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm_Password',
+                            validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')

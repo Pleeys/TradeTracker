@@ -22,7 +22,7 @@ form-head{% extends "layout.html" %}
                 {{ form.submit(class="btn") }}
             </div>
             <small class="form-group">
-                    <a href="#" class="form-link">Forgot Password?</a>       
+                    <a href="{{ url_for('reset_request') }}" class="form-link">Forgot Password?</a>       
             </small>
         </form>
     </div>

@@ -2,10 +2,12 @@ import os
 import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
-from tradetracker import app, db, bcrypt
-from tradetracker.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, PortfolioForm
+from tradetracker import app, db, bcrypt, mail
+from tradetracker.forms import (RegistrationForm, LoginForm, UpdateAccountForm, PostForm,
+                                 PortfolioForm, RequestResetForm, ResetPasswordForm)
 from tradetracker.models import User, Post, Stock
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 from bs4 import BeautifulSoup 
 import requests
 import re
@@ -17,7 +19,6 @@ import yfinance as yf
 import pandas_datareader as web
 import matplotlib.pyplot as plt
 import random
-import seaborn as sns
 from functools import reduce
 
 @app.route('/')
@@ -38,7 +39,7 @@ def register():
     form = RegistrationForm()
     if form.username.data is not None and len(form.username.data) < 4:
         flash('Username must have at least 5 characters', 'error')
-    elif form.email.data is not None and ("@" not in form.email.data or "." not in form.email.data or form.email.data.index(".") < form.email.data.index("@")):
+    elif form.email.data is not None and ("@" not in form.email.data or "." not in form.email.data):
         flash('Invalid email address', 'error')
     elif form.password.data is not None and len(form.password.data) < 7:
         flash('Password must have at least 8 characters', 'error')
@@ -318,3 +319,43 @@ def delete_stock(ticker_id):
     db.session.commit()
     flash('Your stock has been deleted!', 'success')
     return(redirect(url_for('portfolio', username=current_user.username)))
+
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request', sender=('TradeTracker', os.environ.get('EMAIL_USER')), recipients=[user.email])
+    msg.body = f''' To reset your password, visit the following link:
+{url_for('reset_token', token=token, _external=True)}
+
+If you did not make this request then simply ignore this email and no changes will be made.
+'''
+    mail.send(msg)
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title='Reset Password', form=form)
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'error')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('UTF-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash('Your password has been updated! You are now able to log in.', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Password', form=form)

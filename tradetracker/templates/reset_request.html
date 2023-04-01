@@ -1,0 +1,18 @@
+form-head{% extends "layout.html" %} 
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="form-head">Reset Password</legend>                
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}   
+                    {{ form.email(class="form-control", placeholder="Enter Email") }}   
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
