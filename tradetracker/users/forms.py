@@ -1,10 +1,12 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user 
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from tradetracker.models import User
 from flask import flash
+
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -58,12 +60,7 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 flash('Email already exists', 'error')
                 raise ValidationError()
-        
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Post')
-
+            
 class PortfolioForm(FlaskForm):
     ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=4)])
     amount = IntegerField('Amount', validators=[DataRequired(), NumberRange(min=0, message="Value must be non-negative")])
@@ -86,4 +83,4 @@ class ResetPasswordForm(FlaskForm):
                             validators=[DataRequired()])
     confirm_password = PasswordField('Confirm_Password',
                             validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Reset Password')
+    submit = SubmitField('Reset Password')          

@@ -12,10 +12,10 @@
                 <div class="post-content">
                     <div class="article-head">
                     <img class="user-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-                        <a class="article-author" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username}}</a>
+                        <a class="article-author" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username}}</a>
                         <small class="article-date">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
                     </div>
-                    <a class="article-title post-link" href="{{ url_for('post', post_id=post.id ) }}"> {{ post.title }}</a>
+                    <a class="article-title post-link" href="{{ url_for('posts.post', post_id=post.id ) }}"> {{ post.title }}</a>
                     <p class="article-content"> {{ post.content }}</p>
                 </div>
             </div>
@@ -25,9 +25,9 @@
     {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_num %}
             {% if posts.page == page_num %}
-                <a class="page_num" id="current_page" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+                <a class="page_num" id="current_page" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
             {% else %}
-                <a class="page_num" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+                <a class="page_num" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
             {% endif %}
         {% else %}
             ...

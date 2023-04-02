@@ -5,18 +5,18 @@
         <div class="post-content">
             <div class="article-head">
             <img class="user-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-                <a class="article-author" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username}}</a>
+                <a class="article-author" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username}}</a>
                 <small class="article-date">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
                 {% if post.author == current_user %}
                     <div class="update-delete-btn">
-                        <a class="post-links" id="update-btn" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
-                        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+                        <a class="post-links" id="update-btn" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
+                        <form action="{{ url_for('posts.delete_post', post_id=post.id) }}" method="POST">
                             <input class="post-links" id=delete-btn type="submit" value="Delete">
                         </form>
                     </div>               
                 {% endif %}
             </div>
-            <a class="article-title" href="{{ url_for('post', post_id=post.id ) }}"> {{ post.title }}</a>
+            <a class="article-title" href="{{ url_for('posts.post', post_id=post.id ) }}"> {{ post.title }}</a>
             <p class="article-content"> {{ post.content }}</p>
         </div>
     </div>

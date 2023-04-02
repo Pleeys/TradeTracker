@@ -25,7 +25,7 @@
             options: {
                 animation: {
                 duration: 2000,
-                easing: 'easeOutBounce'
+                easing: 'easeInOutQuart'
                 },
                 plugins: {
                     tooltip: {
@@ -123,7 +123,7 @@
                             {% for value in row %}
                             <td>{{ value }}</td>
                             {% endfor %}
-                            <form action="{{ url_for('delete_stock', ticker_id = ticker_id[index]) }}" method="POST">
+                            <form action="{{ url_for('users.delete_stock', ticker_id = ticker_id[index]) }}" method="POST">
                                 <td>
                                     <button type="submit" class="delete-btn">
                                         <i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i>
