@@ -62,7 +62,6 @@ def earnings():
     source = requests.get('https://www.earningswhispers.com/calendar')
     soup = BeautifulSoup(source.content, 'lxml')
 
-    espcalendar = soup.find('ul', id='epscalendar')
 
     companies_html = soup.findAll('div', class_='company')
     tickers_html = soup.findAll('div', class_='ticker')

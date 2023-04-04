@@ -258,7 +258,6 @@ body {
 }
 .article-date {
   float: right;
-  margin-top: 28px;
 }
 .article-title {
   transition: color 0.3s; 

@@ -121,7 +121,6 @@ def portfolio(username):
         stocks = Stock.query.filter_by(user_id=user.id).all()
         tickers = [stock.ticker for stock in stocks]
         amounts = [stock.amount for stock in stocks]
-        t_a = dict(zip(tickers, amounts))
         dates = [stock.date_posted.strftime('%Y-%m-%d') for stock in stocks]
         prices = []
         total = [] 
@@ -142,9 +141,11 @@ def portfolio(username):
         flash('The stock has been added!', 'success')
         return(redirect(url_for('users.portfolio', username=current_user.username)))
         
-    
+    ticker_to_value = {}
     for i in range(len(tickers)):     
-        ticker_value = yf.Ticker(tickers[i])
+        if tickers[i]  not in ticker_to_value:
+                ticker_to_value[tickers[i]] = yf.Ticker(tickers[i])
+        ticker_value = ticker_to_value[tickers[i]]
         stockinfo = ticker_value.fast_info
         last_price = round(stockinfo['lastPrice'],2)
         prices.append(last_price)
@@ -165,7 +166,7 @@ def portfolio(username):
 
         for stock in same_stocks:       
             ticker_id.append(stock.id) 
-            ticker_value = yf.Ticker(stock.ticker)
+            ticker_value = ticker_to_value[stock.ticker]
             stockinfo = ticker_value.fast_info
             last_price = round(stockinfo['lastPrice'],2)
             if stock.ticker in ticker_labels:
@@ -178,11 +179,11 @@ def portfolio(username):
                 total_prices.append(round(stock.amount*last_price,2))
                 
                 
-            
+        print(total_prices)
         overview = list(zip(ticker_labels, ticker_amounts, total_prices))
         df_overview = pd.DataFrame(overview[0:], columns=overview[0])
 
-        summary = reduce(lambda acc, val: acc + val, total_prices)
+        summary = round(reduce(lambda acc, val: acc + val, total_prices),2)
                 
     else: 
         overview = list(zip(ticker_labels, ticker_amounts, total_prices))

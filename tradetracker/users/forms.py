@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from tradetracker.models import User
 from flask import flash
-
+import yfinance as yf 
 
 
 class RegistrationForm(FlaskForm):
@@ -65,6 +65,14 @@ class PortfolioForm(FlaskForm):
     ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=4)])
     amount = IntegerField('Amount', validators=[DataRequired(), NumberRange(min=0, message="Value must be non-negative")])
     submit = SubmitField('Add')
+
+    def validate_ticker(form, ticker):
+        try:
+            is_ticker = yf.Ticker(ticker.data)
+            is_ticker.info
+        except: 
+             flash('Invalid stock name!', 'error')
+             raise ValidationError()
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email',
