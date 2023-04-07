@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
-{% block secondcontent %}
+{% block content %}
+<div class="wrapper">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" 
     integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" 
@@ -16,10 +17,10 @@
         new Chart(ctx, {
           type: 'doughnut',
           data: {
-            labels: {{ ticker_labels|tojson}},
+            labels: {{ ticker_labels|tojson }},
             datasets: [{
               label: 'Number of shares',
-              data: {{ ticker_amounts|tojson}},
+              data: {{ ticker_amounts|tojson }},
             }]
             },
             options: {
@@ -57,9 +58,7 @@
             }
         });
       </script>
-{% endblock %}
-{% block content %}
-    <div class="content-section">
+    <div class="content-section portfolio-content">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
@@ -74,82 +73,89 @@
                 </div>
             </fieldset>
             <div class="form-group">
-                {{ form.submit(class="btn") }}
+                {{ form.submit(class="btn portfolio-btn") }}
             </div>
         </form>
-        <div class="stock-elements">
-            <div class="stock-overview">
-                <h1>Stocks Overview</h1>
-                    <i class='bx bx-history history' id="click-history"></i>
-                <h2>Total: {{ summary }} $</h2>
-                <table class="stock-table">
-                    <thead>
-                        <tr class="stock-tr">
-                            <th>Ticker</th>
-                            <th>Amount</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for index, row in df_overview.iterrows() %}
-                        <tr class="stock-tr">
-                            {% for value in row %}
-                            <td>{{ value }}</td>
-                            {% endfor %} 
+    </div>
+</div>
+{% endblock %}
+{% block secondcontent %}
+<div class="content-section">
+    <div class="stock-elements">
+        <div class="stock-overview">
+            <h1>Stocks Overview</h1>
+                <i class='bx bx-history history' id="click-history"></i>
+            <h2>Total: {{ summary }} $</h2>
+            <table class="stock-table">
+                <thead>
+                    <tr class="stock-tr">
+                        <th>Ticker</th>
+                        <th>Amount</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in df_overview.iterrows() %}
+                    <tr class="stock-tr">
+                        {% for value in row %}
+                        <td>{{ value }}</td>
+                        {% endfor %} 
+                        <td>
+                            <i class='bx bx-dollar' ></i>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="stock-history">
+            <h1>Stocks history</h1>
+                <i class='bx bx-dollar-circle history' id="click-overview"></i>
+            <table class="stock-table">
+                <thead>
+                    <tr class="stock-tr">
+                        <th>Ticker</th>
+                        <th>Amount</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in df.iterrows() %}
+                    <tr class="stock-tr">
+                        {% for value in row %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                        <form action="{{ url_for('users.delete_stock', ticker_id = ticker_id[index]) }}" method="POST">
                             <td>
-                                <i class='bx bx-dollar' ></i>
+                                <button type="submit" class="delete-btn">
+                                    <i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i>
+                                </button>
                             </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="stock-history">
-                <h1>Stocks history</h1>
-                    <i class='bx bx-dollar-circle history' id="click-overview"></i>
-                <table class="stock-table">
-                    <thead>
-                        <tr class="stock-tr">
-                            <th>Ticker</th>
-                            <th>Amount</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for index, row in df.iterrows() %}
-                        <tr class="stock-tr">
-                            {% for value in row %}
-                            <td>{{ value }}</td>
-                            {% endfor %}
-                            <form action="{{ url_for('users.delete_stock', ticker_id = ticker_id[index]) }}" method="POST">
-                                <td>
-                                    <button type="submit" class="delete-btn">
-                                        <i class='bx bx-x delete-stock' id='{{ ticker_id[index] }}'></i>
-                                    </button>
-                                </td>
-                            </form>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-    <script>
-            const clickHistory = document.getElementById("click-history");
-            var stockHistory = document.querySelector(".stock-history");
-            var stockOverview = document.querySelector(".stock-overview");
-            clickHistory.addEventListener("click", function() {
-                stockOverview.style.display = 'none';
-                stockHistory.style.display = 'block';
-            })
-            const clickOverview = document.getElementById("click-overview");
-            clickOverview.addEventListener("click", function() {
-                stockHistory.style.display = 'none';
-                stockOverview.style.display = 'block';
-            })
+</div>
+<script>
+        const clickHistory = document.getElementById("click-history");
+        var stockHistory = document.querySelector(".stock-history");
+        var stockOverview = document.querySelector(".stock-overview");
+        clickHistory.addEventListener("click", function() {
+            stockOverview.style.display = 'none';
+            stockHistory.style.display = 'block';
+        })
+        const clickOverview = document.getElementById("click-overview");
+        clickOverview.addEventListener("click", function() {
+            stockHistory.style.display = 'none';
+            stockOverview.style.display = 'block';
+        })
 
-    </script>
+</script>
+
 {% endblock %}
+       

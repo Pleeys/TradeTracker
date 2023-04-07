@@ -1,9 +1,9 @@
-form-head{% extends "layout.html" %} 
+{% extends "layout.html" %} 
 {% block content %}
     <div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
-            <fieldset class="form-group">
+            <fieldset class="form-group-elements">
                 <legend class="form-head">Log In</legend>                
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}   
@@ -14,21 +14,26 @@ form-head{% extends "layout.html" %}
                     {{ form.password(class="form-control", placeholder="Enter Password") }}  
                 </div>
                 <div class="form-check">
-                    {{ form.remember(class="form-check-input check") }}
-                    {{ form.remember.label(class="form-check-label") }}        
+                    <div class="form-check-elements">
+                        {{ form.remember.label(class="form-check-label") }}  
+                        {{ form.remember(class="form-check-input check") }}  
+                    </div>
                 </div>
             </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn") }}
+            <div class="form-middle">
+                <div class="form-group">
+                    {{ form.submit(class="btn") }}
+                </div>
+                <small class="form-group">
+                        <a href="{{ url_for('users.reset_request') }}" class="form-link">Forgot Password?</a>       
+                </small>              
             </div>
-            <small class="form-group">
-                    <a href="{{ url_for('users.reset_request') }}" class="form-link">Forgot Password?</a>       
-            </small>
+            <div class="form-bottom">
+                <small>
+                    Need An Account? <a href="{{ url_for('users.register') }}" class="form-link">Sign Up Now</a>
+                </small>
+            </div>
         </form>
-    </div>
-    <div class="form-bottom">
-        <small>
-            Need An Account? <a href="{{ url_for('users.register') }}" class="form-link">Sign Up Now</a>
-        </small>
+        
     </div>
 {% endblock content %}

@@ -4,17 +4,18 @@
     <div class="media-body-posts">
         <div class="post-content">
             <div class="article-head">
-            <img class="user-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-                <a class="article-author" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username}}</a>
-                <small class="article-date">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-                {% if post.author == current_user %}
-                    <div class="update-delete-btn">
-                        <a class="post-links" id="update-btn" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
+                <div class="article-profile">
+                    <img class="user-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+                    <a class="article-author" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username}}</a>
+                    {% if post.author == current_user %}
+                        <a id="update-btn" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
                         <form action="{{ url_for('posts.delete_post', post_id=post.id) }}" method="POST">
-                            <input class="post-links" id=delete-btn type="submit" value="Delete">
-                        </form>
-                    </div>               
-                {% endif %}
+                            <input  id="delete-btn" type="submit" value="Delete">
+                        </form>           
+                    {% endif %}
+                </div>   
+               
+                <small class="article-date">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
             </div>
             <a class="article-title" href="{{ url_for('posts.post', post_id=post.id ) }}"> {{ post.title }}</a>
             <p class="article-content"> {{ post.content }}</p>

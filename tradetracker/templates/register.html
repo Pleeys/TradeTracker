@@ -3,7 +3,7 @@
     <div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
-            <fieldset class="form-group">
+            <fieldset class="form-group-elements">
                 <legend class="form-head">Join Today</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}   
@@ -22,14 +22,15 @@
                     {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}      
                 </div>
             </fieldset>
-            <div class="form-group">
+            <div class="form-group middle-btn">
                 {{ form.submit(class="btn") }}
+            </div>
+            <div class="form-bottom">
+                <small>
+                        Already Have An Account? <a href="{{ url_for('users.login') }}" class="form-link">Sign In</a>
+                </small>
             </div>
         </form>
     </div>
-    <div class="form-bottom">
-        <small>
-                Already Have An Account? <a href="{{ url_for('users.login') }}" class="form-link">Sign In</a>
-        </small>
-    </div>
+    
 {% endblock content %}
