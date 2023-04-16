@@ -8,6 +8,8 @@ import requests
 import re
 import pandas as pd
 import csv
+from tradetracker.config import Config
+from datetime import datetime, timedelta
 posts = Blueprint('posts', __name__)
 
 @posts.route("/post/new", methods=['GET', 'POST'])
@@ -112,5 +114,21 @@ def download_earnings():
     return redirect(url_for('posts.earnings'))
 
 
+@posts.route('/news')
+def news():
+    key = Config.AV_KEY
 
+    today = datetime.now()
+    month_ago = today - timedelta(days=30)
+    month_ago_str = month_ago.strftime("%Y%m%dT%H%M")
 
+    # replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
+    url = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=COIN,CRYPTO:BTC,FOREX:USD&time_from={month_ago_str}&sort=LATEST&apikey={key}'
+    r = requests.get(url)
+    data = r.json()
+    articles = pd.DataFrame(data['feed'])
+    articles['time_published'] = pd.to_datetime(articles['time_published']).dt.strftime('%Y-%m-%d')
+
+   
+
+    return render_template('news.html', title='Stock News', data=data, articles=articles)

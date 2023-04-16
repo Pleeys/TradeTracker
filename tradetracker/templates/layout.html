@@ -57,11 +57,11 @@
               </li>
             {% endif %}
               <li>
-                  <a href="#">
-                    <i class="bx bxs-shopping-bag"></i>
-                    <span class="nav-item">Products</span>
+                  <a href="{{ url_for('posts.news') }}">
+                    <i class='bx bx-news'></i>
+                    <span class="nav-item">News</span>
                   </a>
-                  <span class="tooltip">Products</span>
+                  <span class="tooltip">News</span>
               </li>
               <li>
                   <a href="#">
@@ -95,6 +95,9 @@
           </div>
           <div class="secondary-block-content">
             {% block secondcontent %}{% endblock %}
+          </div>
+          <div class="third-block-content">
+            {% block thirdcontent %}{% endblock %}
           </div>
         </div>
       </main>  

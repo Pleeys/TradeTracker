@@ -551,8 +551,8 @@ Hello, world!
         """Whitespace must be preserved in <pre> and <textarea> tags,
         even if that would mean not prettifying the markup.
         """
-        pre_markup = "<pre>   </pre>"
-        textarea_markup = "<textarea> woo\nwoo  </textarea>"
+        pre_markup = "<pre>a   z</pre>\n"
+        textarea_markup = "<textarea> woo\nwoo  </textarea>\n"
         self.assert_soup(pre_markup)
         self.assert_soup(textarea_markup)
 
@@ -563,7 +563,7 @@ Hello, world!
         assert soup.textarea.prettify() == textarea_markup
 
         soup = self.soup("<textarea></textarea>")
-        assert soup.textarea.prettify() == "<textarea></textarea>"
+        assert soup.textarea.prettify() == "<textarea></textarea>\n"
 
     def test_nested_inline_elements(self):
         """Inline elements can be nested indefinitely."""

@@ -23,8 +23,11 @@ from typing import NoReturn
 from typing import Optional
 from typing import Set
 from typing import Tuple
+from typing import TYPE_CHECKING
 from typing import TypeVar
 from typing import Union
+
+from ..util.typing import Self
 
 _T = TypeVar("_T", bound=Any)
 _S = TypeVar("_S", bound=Any)
@@ -54,6 +57,14 @@ class ReadOnlyContainer:
 
 
 class ImmutableDictBase(ReadOnlyContainer, Dict[_KT, _VT]):
+    if TYPE_CHECKING:
+
+        def __new__(cls, *args: Any) -> Self:
+            ...
+
+        def __init__(cls, *args: Any):
+            ...
+
     def _readonly(self, *arg: Any, **kw: Any) -> NoReturn:
         self._immutable()
 
@@ -75,7 +86,7 @@ class ImmutableDictBase(ReadOnlyContainer, Dict[_KT, _VT]):
 
 class immutabledict(ImmutableDictBase[_KT, _VT]):
     def __new__(cls, *args):
-        new = dict.__new__(cls)
+        new = ImmutableDictBase.__new__(cls)
         dict.__init__(new, *args)
         return new
 
@@ -93,7 +104,7 @@ class immutabledict(ImmutableDictBase[_KT, _VT]):
         if not __d:
             return self
 
-        new = dict.__new__(self.__class__)
+        new = ImmutableDictBase.__new__(self.__class__)
         dict.__init__(new, self)
         dict.update(new, __d)  # type: ignore
         return new
@@ -105,7 +116,7 @@ class immutabledict(ImmutableDictBase[_KT, _VT]):
         if not __d and not kw:
             return self
 
-        new = dict.__new__(self.__class__)
+        new = ImmutableDictBase.__new__(self.__class__)
         dict.__init__(new, self)
         if __d:
             dict.update(new, __d)  # type: ignore
@@ -119,7 +130,7 @@ class immutabledict(ImmutableDictBase[_KT, _VT]):
         for d in dicts:
             if d:
                 if new is None:
-                    new = dict.__new__(self.__class__)
+                    new = ImmutableDictBase.__new__(self.__class__)
                     dict.__init__(new, self)
                 dict.update(new, d)  # type: ignore
         if new is None:
@@ -157,8 +168,11 @@ class OrderedSet(Set[_T]):
         else:
             self._list = []
 
-    def __reduce__(self):
-        return (OrderedSet, (self._list,))
+    def copy(self) -> OrderedSet[_T]:
+        cp = self.__class__()
+        cp._list = self._list.copy()
+        set.update(cp, cp._list)
+        return cp
 
     def add(self, element: _T) -> None:
         if element not in self:
@@ -168,6 +182,14 @@ class OrderedSet(Set[_T]):
     def remove(self, element: _T) -> None:
         super().remove(element)
         self._list.remove(element)
+
+    def pop(self) -> _T:
+        try:
+            value = self._list.pop()
+        except IndexError:
+            raise KeyError("pop from an empty set") from None
+        super().remove(value)
+        return value
 
     def insert(self, pos: int, element: _T) -> None:
         if element not in self:
@@ -209,9 +231,8 @@ class OrderedSet(Set[_T]):
         return self  # type: ignore
 
     def union(self, *other: Iterable[_S]) -> OrderedSet[Union[_T, _S]]:
-        result: OrderedSet[Union[_T, _S]] = self.__class__(self)  # type: ignore  # noqa: E501
-        for o in other:
-            result.update(o)
+        result: OrderedSet[Union[_T, _S]] = self.copy()  # type: ignore
+        result.update(*other)
         return result
 
     def __or__(self, other: AbstractSet[_S]) -> OrderedSet[Union[_T, _S]]:
@@ -226,9 +247,17 @@ class OrderedSet(Set[_T]):
         return self.intersection(other)
 
     def symmetric_difference(self, other: Iterable[_T]) -> OrderedSet[_T]:
-        other_set = other if isinstance(other, set) else set(other)
+        collection: Collection[_T]
+        if isinstance(other, set):
+            collection = other_set = other
+        elif isinstance(other, Collection):
+            collection = other
+            other_set = set(other)
+        else:
+            collection = list(other)
+            other_set = set(collection)
         result = self.__class__(a for a in self if a not in other_set)
-        result.update(a for a in other if a not in self)
+        result.update(a for a in collection if a not in self)
         return result
 
     def __xor__(self, other: AbstractSet[_S]) -> OrderedSet[Union[_T, _S]]:
@@ -252,9 +281,10 @@ class OrderedSet(Set[_T]):
         return self
 
     def symmetric_difference_update(self, other: Iterable[Any]) -> None:
-        super().symmetric_difference_update(other)
+        collection = other if isinstance(other, Collection) else list(other)
+        super().symmetric_difference_update(collection)
         self._list = [a for a in self._list if a in self]
-        self._list += [a for a in other if a in self]
+        self._list += [a for a in collection if a in self]
 
     def __ixor__(self, other: AbstractSet[_S]) -> OrderedSet[Union[_T, _S]]:
         self.symmetric_difference_update(other)

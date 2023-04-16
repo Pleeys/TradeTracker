@@ -347,7 +347,7 @@
   padding: 1%;
   text-align: center;
   color: white;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
  .form-group-elements {
   display: grid;
@@ -358,20 +358,20 @@
   justify-content: center;
   text-align: center;
   align-items: center;
-  margin: 1vh;
-  font-size: 0.7rem;
-  padding: 1vh
+  margin: 0.8vh;
+  font-size: 0.5rem;
+  padding: 0.8vh
 }
 .form-head {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 .form-control {
   width: 100%;
   text-align: center;
   float: right;
-  margin-top: 0.5vh;
-  margin-bottom: 0.5vh;
+  margin-top: 0.3vh;
+  margin-bottom: 0.3vh;
 } 
 .form-check {
   display: flex;
@@ -401,11 +401,11 @@
   gap: 1vw;
 }
 .form-bottom {
-  font-size: 0.5rem;
+  font-size: 0.4rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 1vw;
+  margin: 0.7vw;
 }
 .form-bottom a {
   display: flex;
@@ -658,7 +658,57 @@ td, th {
 .stock-overview {
   display: block;
 }
-
+.news-content {
+  position: fixed;
+  left: 20%;
+  width: 75%;
+  height: 100%;
+  overflow: auto;
+}
+.news-articles {
+  display: flex;
+  color: white;
+  background-color: #1A213D;
+  flex-direction: column;
+}
+.news-title {
+  color: #FF5F5C;
+  transition: color 0.3s; 
+  text-decoration: none;
+  font-size: 1.5rem;
+  margin: auto;
+}
+.news-text {
+  flex: 1;
+}
+.news-text a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.news-text a:hover {
+  color: white;
+}
+.news-article img {
+  width: 30%;
+  height: 30%;
+  float: left;
+  margin-right: 10px;
+}
+.news-article {
+  padding: 1%;
+  height: 100%;
+  width: 95%;
+  margin: 1%;
+  border: 2.5px solid #232946;
+}
+.news-bottom {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
 @media only screen and (min-width: 768px) {
   .navbar-right.active a {
     display: block;
@@ -780,10 +830,12 @@ td, th {
     font-size: 2rem;
   }
   .form-group {
+    border: none;
     display: block;
     margin-bottom: 20px;
   }
   .form-head {
+    margin-bottom: 5%;
     font-size: 35px;
   }
   .form-group label {
@@ -807,7 +859,7 @@ td, th {
     display: block;
     width: 100%;
     padding: 10px;
-    font-size: 25px;
+    font-size: 20px;
     border-radius: 5px;
   }
 
@@ -853,7 +905,7 @@ td, th {
   .block-content {
     right: 5%;
     background-color: #1A213D;
-  }
+ }
   .secondary-block-content {
     top: 30%;
     position: fixed;
@@ -874,13 +926,12 @@ td, th {
   .stock-table {
     margin: 10px;
     table-layout: fixed;
-    font-size: 25px;
+    font-size: 20px;
   }
   .stock-table td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
   }
   .stock-elements tr td {
     background-color: #1A213D;

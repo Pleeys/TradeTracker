@@ -63,8 +63,8 @@ class UpdateAccountForm(FlaskForm):
             
 class PortfolioForm(FlaskForm):
     ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=4)])
-    amount = IntegerField('Amount', validators=[DataRequired(), NumberRange(min=0, message="Value must be non-negative")])
-    submit = SubmitField('Add')
+    amount = IntegerField('Amount', validators=[DataRequired()])
+    submit = SubmitField('Update')
 
     def validate_ticker(form, ticker):
         try:

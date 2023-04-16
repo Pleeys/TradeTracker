@@ -147,8 +147,8 @@ def portfolio(username):
                 ticker_to_value[tickers[i]] = yf.Ticker(tickers[i])
         ticker_value = ticker_to_value[tickers[i]]
         stockinfo = ticker_value.fast_info
-        last_price = round(stockinfo['lastPrice'],2)
-        prices.append(last_price)
+        last_price = stockinfo['lastPrice']
+        prices.append(round(last_price,2))
         amount = amounts[i]
         total_round = round(last_price*amount,2)
         total.append(total_round)
@@ -180,6 +180,12 @@ def portfolio(username):
                 
                 
         print(total_prices)
+        for i in range(len(ticker_amounts)):
+            if ticker_amounts[i] <= 0:
+                ticker_amounts.pop(i)
+                ticker_labels.pop(i)
+                total_prices.pop(i)
+
         overview = list(zip(ticker_labels, ticker_amounts, total_prices))
         df_overview = pd.DataFrame(overview[0:], columns=overview[0])
 

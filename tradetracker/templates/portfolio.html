@@ -62,7 +62,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="form-head">Add Your Stocks Here!</legend>
+                <legend class="form-head">Update Your Portfolio!</legend>
                 <div class="form-group">
                     {{ form.ticker.label(class="form-control-label") }}   
                     {{ form.ticker(class="form-control", placeholder="Enter Ticker") }}                      
@@ -98,7 +98,7 @@
                     {% for index, row in df_overview.iterrows() %}
                     <tr class="stock-tr">
                         {% for value in row %}
-                        <td>{{ value }}</td>
+                                <td>{{ value }}</td>
                         {% endfor %} 
                         <td>
                             <i class='bx bx-dollar' ></i>
