@@ -59,11 +59,13 @@ def delete_post(post_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('main.home'))
 
-@posts.route('/earnings')
-def earnings():
-    source = requests.get('https://www.earningswhispers.com/calendar')
-    soup = BeautifulSoup(source.content, 'lxml')
-
+def fetch_earnings():
+    try:
+        source = requests.get('https://www.earningswhispers.com/calendar')
+        soup = BeautifulSoup(source.content, 'lxml')
+    except:
+        flash('We\'re sorry, an error occurred with the API. Please try again later!', 'error')
+        return redirect(url_for('main.home'))
 
     companies_html = soup.findAll('div', class_='company')
     tickers_html = soup.findAll('div', class_='ticker')
@@ -98,14 +100,18 @@ def earnings():
 
     earnings_list = list(zip(companies, tickers, times, revenue_growths, earnings_growths))
 
+    return(earnings_list)
+
+@posts.route('/earnings')
+def earnings():
+    earnings_list = fetch_earnings()
     df = pd.DataFrame(earnings_list[1:], columns=earnings_list[0])
 
-    
     return render_template('earnings.html', earnings_list=earnings_list, df=df, title='Earnings')
 
 @posts.route('/download_earnings')
 def download_earnings():
-    earnings_list = earnings()
+    earnings_list = fetch_earnings()
     filename = 'earnings.csv'
     with open(filename, 'w') as f:
         writer = csv.writer(f, delimiter='|')
@@ -135,23 +141,33 @@ def news():
     
 @posts.route('/overview', methods=['GET', 'POST'])
 def overview():
+
     key = Config.AV_KEY
     form = StockForm()
-    try:
-        ticker = form.ticker.data
-    except: 
-        ticker = 'MSFT'
-    url = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={key}'
-    r = requests.get(url)
-    data = r.json()
-    description = data['Description']
-    del data['Description']
-    if form.validate_on_submit():
-        try:
-            ticker = form.ticker.data
-            return redirect(url_for('posts.overview', ticker=ticker))
-        except:
-            flash('Ticker does not exists!', 'error')
-            
-    return render_template('overview.html', title='Company Overview', data=data, form=form, description=description, ticker=ticker)
 
+    if form.ticker.data:
+        ticker = form.ticker.data
+    else:
+        ticker = 'MSFT'
+    try:
+        url = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={key}'
+        r = requests.get(url)
+        data = r.json()
+    except KeyError:
+        flash('Ticker does not exists!', 'error')
+        return redirect(url_for('main.home'))
+    except:
+        flash('We\'re sorry, an error occurred with the API. Please try again later!', 'error')
+        return redirect(url_for('main.home'))
+    if 'Description' in data:
+        description = data['Description']
+        del data['Description']
+    else:
+        flash('Ticker does not exists!', 'error')
+        ticker = ''
+        description = ''
+    if form.validate_on_submit():
+        ticker = form.ticker.data
+        return redirect(url_for('posts.overview', ticker=ticker))
+
+    return render_template('overview.html', title='Company Overview', data=data, form=form, description=description, ticker=ticker)

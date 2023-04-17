@@ -709,22 +709,12 @@ td, th {
   width: 100%;
   margin-top: 10px;
 }
-.company-overview {
-  position: fixed;
-  display: flex;
-  height: 35%;
-  width: 40%;
-  top: 60%;
-  right: 5%;
-  color: white;
-  overflow: auto;
+.company-ticker {
+  text-transform: uppercase;
+  color: #FF5F5C;
 }
-.company-description {
-  position: fixed;
-  display: flex;
-  left: 5%;
-  width: 40%;
-
+.company-overview tr td{
+  border: 2px solid #1A213D;
 }
 @media only screen and (min-width: 768px) {
   .navbar-right.active a {
@@ -788,6 +778,9 @@ td, th {
     width: 70%; 
     font-size: 1.5rem;
     gap: 1rem;
+  }
+  .article-date {
+    font-size: 16px;
   }
   .new_post {
     word-spacing: 0;
@@ -1000,5 +993,21 @@ td, th {
       border: 5px solid #D32F2F;
       border-radius: 30px;
       padding: 0 30px;
+    }
+    .company-overview {
+      position: fixed;
+      display: flex;
+      height: 35%;
+      width: 40%;
+      top: 60%;
+      right: 5%;
+      color: white;
+      overflow: auto;
+    }
+    .company-description {
+      position: fixed;
+      display: flex;
+      left: 5%;
+      width: 40%;
     }
 }
