@@ -1,5 +1,4 @@
 {% extends "layout.html" %} 
-
 {% block content %}
 
     <div class="news-content">
@@ -8,7 +7,7 @@
                 <div class="news-article">
                     <img src="{{ article[1]['banner_image'] }}">
                     <div class="news-text">
-                        <a class="news-title" href="{{ article[1]['url'] }}" >{{ article[1]['title'] }}</a>
+                        <a class="news-title" href="{{ article[1]['url'] }}" target="_blank">{{ article[1]['title'] }}</a>
                         <p>{{ article[1]['summary'] }}</p>  
                         <div class="news-bottom">
                             <p>{{ article[1]['source_domain'] }}</p><p>{{ article[1]['time_published'] }}</p>

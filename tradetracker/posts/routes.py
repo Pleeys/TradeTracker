@@ -2,7 +2,7 @@ from flask import (render_template, url_for, flash, redirect, request, abort, Bl
 from flask_login import current_user, login_required
 from tradetracker import db
 from tradetracker.models import Post
-from tradetracker.posts.forms import PostForm
+from tradetracker.posts.forms import PostForm, StockForm
 from bs4 import BeautifulSoup 
 import requests
 import re
@@ -121,14 +121,37 @@ def news():
     today = datetime.now()
     month_ago = today - timedelta(days=30)
     month_ago_str = month_ago.strftime("%Y%m%dT%H%M")
+    try:
+        url = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=COIN,CRYPTO:BTC,FOREX:USD&time_from={month_ago_str}&sort=LATEST&apikey={key}'
+        r = requests.get(url)
+        data = r.json()
+        articles = pd.DataFrame(data['feed'])
+        articles['time_published'] = pd.to_datetime(articles['time_published']).dt.strftime('%Y-%m-%d')
 
-    # replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-    url = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=COIN,CRYPTO:BTC,FOREX:USD&time_from={month_ago_str}&sort=LATEST&apikey={key}'
+        return render_template('news.html', title='Stock News', data=data, articles=articles)
+    except:
+        flash('We\'re sorry, an error occurred with the API. Please try again later!', 'error')
+        return redirect(url_for('main.home'))
+    
+@posts.route('/overview', methods=['GET', 'POST'])
+def overview():
+    key = Config.AV_KEY
+    form = StockForm()
+    try:
+        ticker = form.ticker.data
+    except: 
+        ticker = 'MSFT'
+    url = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={key}'
     r = requests.get(url)
     data = r.json()
-    articles = pd.DataFrame(data['feed'])
-    articles['time_published'] = pd.to_datetime(articles['time_published']).dt.strftime('%Y-%m-%d')
+    description = data['Description']
+    del data['Description']
+    if form.validate_on_submit():
+        try:
+            ticker = form.ticker.data
+            return redirect(url_for('posts.overview', ticker=ticker))
+        except:
+            flash('Ticker does not exists!', 'error')
+            
+    return render_template('overview.html', title='Company Overview', data=data, form=form, description=description, ticker=ticker)
 
-   
-
-    return render_template('news.html', title='Stock News', data=data, articles=articles)

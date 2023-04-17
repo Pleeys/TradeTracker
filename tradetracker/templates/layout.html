@@ -50,7 +50,7 @@
             {% if current_user.is_authenticated %}
               <li>
                   <a href="{{ url_for('users.portfolio', username=current_user.username) }}">
-                    <i class='bx bx-wallet'></i>
+                    <i class='bx bx-pie-chart-alt' ></i>
                     <span class="nav-item">Portfolio</span>
                   </a>
                   <span class="tooltip">Portfolio</span>
@@ -64,11 +64,11 @@
                   <span class="tooltip">News</span>
               </li>
               <li>
-                  <a href="#">
-                    <i class="bx bx-list-check"></i>
-                    <span class="nav-item">Categories</span>
+                  <a href="{{ url_for('posts.overview') }}">
+                    <i class='bx bx-chalkboard' ></i>
+                    <span class="nav-item">Overview</span>
                   </a>
-                  <span class="tooltip">Categories</span>
+                  <span class="tooltip">Overview</span>
               </li>
               <li>
                   <a href="{{ url_for('posts.earnings') }}">

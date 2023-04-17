@@ -1,0 +1,42 @@
+{% extends "layout.html" %} 
+{% block secondcontent %}
+<div class="company-description">
+    <table class="earnings-table">
+        <thead>
+            <tr class="earnings-tr">
+                <th>{{ ticker }}</th>
+            </tr>
+        </thead>
+        <tr class="earnings-tr">
+          <td>{{ description }}</td>
+        </tr>
+    </table>
+</div>
+<div class="company-overview">
+    <table class="earnings-table">
+          {% for key, value in data.items() %}
+          <tr class="earnings-tr">
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+          </tr>
+          {% endfor %}
+      </table>
+</div>
+{% endblock %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            <fieldset class="form-group-elements">
+                <legend class="form-head">Enter Ticker!</legend>                
+                <div class="form-group">
+                    {{ form.ticker.label(class="form-control-label") }}   
+                    {{ form.ticker(class="form-control", placeholder="Enter Ticker") }}   
+                </div>
+                <div class="form-middle">
+                    <div class="form-group">
+                        {{ form.submit(class="btn") }}
+                    </div>           
+                </div>
+        </form>
+    </div>
+{% endblock content %}

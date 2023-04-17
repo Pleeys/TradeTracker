@@ -709,6 +709,23 @@ td, th {
   width: 100%;
   margin-top: 10px;
 }
+.company-overview {
+  position: fixed;
+  display: flex;
+  height: 35%;
+  width: 40%;
+  top: 60%;
+  right: 5%;
+  color: white;
+  overflow: auto;
+}
+.company-description {
+  position: fixed;
+  display: flex;
+  left: 5%;
+  width: 40%;
+
+}
 @media only screen and (min-width: 768px) {
   .navbar-right.active a {
     display: block;
