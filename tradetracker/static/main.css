@@ -545,6 +545,9 @@
 }
 td, th {
   border: 1px solid #232946;
+  font-size: 0.7rem;
+  text-align: center;
+  align-items: center;
 }
 .earnings-elements {
   font-size: 0.5rem;
@@ -588,6 +591,7 @@ td, th {
   text-align: center;
   overflow: auto; 
   max-height: auto; 
+  border: 2px solid #1A213D;
 }
 .stock-overview {
   font-size: 1rem;
@@ -648,6 +652,18 @@ td, th {
   transform: translate(-50%, 50%);
   cursor: pointer;
 }
+#click-overview {
+  position: absolute; 
+  top: 0;
+  right: 0;
+  font-size: 1rem;
+}
+#click-history {
+  position: absolute; 
+  top: 0;
+  right: 0;
+  font-size: 1rem;
+}
 .stock-history {
   display: none;
 }
@@ -675,11 +691,12 @@ td, th {
   color: #FF5F5C;
   transition: color 0.3s; 
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin: auto;
 }
 .news-text {
   flex: 1;
+  font-size: 1rem;
 }
 .news-text a {
   display: block;
@@ -713,8 +730,14 @@ td, th {
   text-transform: uppercase;
   color: #FF5F5C;
 }
+.company-overview table{
+  display: flex;
+  justify-content: center;
+
+}
 .company-overview tr td{
   border: 2px solid #1A213D;
+
 }
 @media only screen and (min-width: 768px) {
   .navbar-right.active a {
@@ -745,6 +768,11 @@ td, th {
   #earnings-download {
     font-size: 1.2rem;
   }
+  .block-content {
+    box-sizing: border-box;
+    width: 100%; 
+    right: 5%;
+  }
 }
 @media only screen and (max-width: 400px) {
   .trade_tracker_logo.active {
@@ -753,8 +781,126 @@ td, th {
   .blocks {
     width: 75%;
   }
+  .news-article img {
+    width: 15%;
+    height: 15%;
+    float: left;
+    margin-right: 10px;
+  }
+  .news-text {
+    font-size: 0.5rem;
+  }
+  .news-title {
+    font-size: 0.5rem;
+  }
+}
+@media only screen and (min-width: 1000px) and (max-width: 1650px) {
+  .blocks {
+    top: 15%;
+  }
+  .block-content {
+    box-sizing: border-box;
+    width: 100%; 
+    right: 5%;
+  }
+  .ticker-overview {
+    position: fixed;
+    display: flex;
+    left: 10%;
+    height: 50%;
+    width: 40%;
+  }
+  .wrapper {
+    position: fixed;
+    left: 10%;
+    margin-bottom: 50px;
+    width: 500px;
+  }
+  .portfolio-content {
+    margin-top: 10%;
+  }
+  .secondary-block-content {
+    position: fixed;
+    right: 10%;
+    height: 50%;
+    width: 40%;
+  }
+  .stock-elements {
+    width: 80%;
+    height: 400px;
+  }
+  .media-head {
+    align-items: center;
+    font-size: 2rem;
+  }
+  .media-body {
+    margin-right: 25%;
+  }
+  .content-section {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    width: 100%;
+    padding: 1%;
+    text-align: center;
+    color: white;
+    font-size: 2rem;
+  }
+  .form-group {
+    border: none;
+    display: block;
+    margin-bottom: 20px;
+  }
+  .form-head {
+    margin-bottom: 5%;
+    font-size: 35px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 25px;
+  }
+  .form-check {
+    font-size: 25px;
+  }
+  .check{
+    margin-left: 1vw;
+    height: 25px;
+    width: 25px;
+  }
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="password"],
+  .form-group input[type="check_password"],
+  .form-group input[type="file"], .content, #amount{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 5px;
+  }
+
+  .form-bottom {
+    font-size: 
+      25px;
+  }
+  .form-middle {
+    font-size: 25px;
+  }
+  .page_num {
+    font-size: 30px;
+   
+  }
+  .btn {
+    font-size: 30px;
+  }
 }
 @media only screen and (min-width: 1650px) {
+  .block-content {
+    box-sizing: border-box;
+    width: 100%; 
+    right: 5%;
+  }
   .trade_tracker_logo {
     font-size: 2rem;
     left: 8%;
@@ -786,9 +932,7 @@ td, th {
     word-spacing: 0;
     margin-right: 40px;
   }
-  .post-content {
-    width: 90%;
-  }
+
   .earnings_list {
     color: white;
   }
@@ -828,16 +972,6 @@ td, th {
   }
   .media-body {
     margin-right: 25%;
-  }
-  .content-section {
-    display: flex;
-    margin: auto;
-    justify-content: center;
-    width: 100%;
-    padding: 1%;
-    text-align: center;
-    color: white;
-    font-size: 2rem;
   }
   .form-group {
     border: none;
@@ -912,10 +1046,7 @@ td, th {
     width: 50%;
     overflow: visible;
   }
-  .block-content {
-    right: 5%;
-    background-color: #1A213D;
- }
+
   .secondary-block-content {
     top: 30%;
     position: fixed;
@@ -927,7 +1058,6 @@ td, th {
     width: 500px;
     height: 450px;
     overflow: auto;
-    border: 2px solid #1A213D;
   }
   .stock-elements h1{
     text-align: center;

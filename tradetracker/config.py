@@ -1,8 +1,7 @@
 import os
-import base64
 
 class Config: 
-    SECRET_KEY = base64.b64encode(os.urandom(16)).decode('utf-8')
+    SECRET_KEY = os.environ.get('SECRET_KEY_FLASK')
     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
