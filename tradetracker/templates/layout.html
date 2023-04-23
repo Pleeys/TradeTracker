@@ -93,12 +93,11 @@
           <div class="block-content">
               {% block content %}{% endblock %}    
           </div>
+          {% if show_secondary_block %}
           <div class="secondary-block-content">
             {% block secondcontent %}{% endblock %}
           </div>
-          <div class="third-block-content">
-            {% block thirdcontent %}{% endblock %}
-          </div>
+          {% endif %}
         </div>
       </main>  
       <script src="{{ url_for('static', filename='script.js') }}"></script>

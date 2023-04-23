@@ -1,4 +1,4 @@
-from flask import (render_template, url_for, flash, redirect, request, abort, Blueprint)
+from flask import (render_template, url_for, flash, redirect, request, abort, Blueprint, send_file)
 from flask_login import current_user, login_required
 from tradetracker import db
 from tradetracker.models import Post
@@ -111,14 +111,17 @@ def earnings():
 
 @posts.route('/download_earnings')
 def download_earnings():
-    earnings_list = fetch_earnings()
-    filename = 'earnings.csv'
-    with open(filename, 'w') as f:
-        writer = csv.writer(f, delimiter='|')
-        writer.writerows(earnings_list)
-        flash('The earnings data has been downloaded and saved as a CSV file!', 'success')
-    return redirect(url_for('posts.earnings'))
-
+    try:
+        earnings_list = fetch_earnings()
+        filename = 'earnings.csv' 
+        with open(filename, 'w', newline='') as f:
+            writer = csv.writer(f, delimiter='|')
+            writer.writerows(earnings_list)
+            flash('The earnings data has been downloaded and saved as a CSV file!', 'success')
+        return send_file('../' + filename, as_attachment=True)
+    except:
+        flash(f'We\'re sorry, you can\'t download the data right now. Try again Later.', 'error')
+        return redirect(url_for('posts.earnings'))
 
 @posts.route('/news')
 def news():

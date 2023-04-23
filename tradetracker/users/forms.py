@@ -62,17 +62,27 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError()
             
 class PortfolioForm(FlaskForm):
-    ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3, max=4)])
+    ticker = StringField('Ticker', validators=[DataRequired(), Length(min=3,max=4)])
     amount = IntegerField('Amount', validators=[DataRequired()])
     submit = SubmitField('Update')
 
     def validate_ticker(form, ticker):
         try:
             is_ticker = yf.Ticker(ticker.data)
-            is_ticker.info
+            stockinfo=is_ticker.fast_info
+            last_price = stockinfo['lastPrice']
+            if last_price == None:
+                raise ValidationError()
+            else:
+                form.uppercase_ticker(form.ticker)
         except: 
              flash('Invalid stock name!', 'error')
              raise ValidationError()
+
+    def uppercase_ticker(form, ticker):
+        ticker.data = ticker.data.upper()
+
+        
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email',

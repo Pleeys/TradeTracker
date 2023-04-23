@@ -120,12 +120,10 @@ def portfolio(username):
     if stock is not None:
         stocks = Stock.query.filter_by(user_id=user.id).all()
         tickers = [stock.ticker for stock in stocks]
-        amounts = [stock.amount for stock in stocks]
+        amounts = [int(stock.amount) for stock in stocks]
         dates = [stock.date_posted.strftime('%Y-%m-%d') for stock in stocks]
         prices = []
         total = [] 
-        print(tickers)  
-        print(amounts)
     else:
         tickers = []
         amounts = []
@@ -171,21 +169,19 @@ def portfolio(username):
             last_price = round(stockinfo['lastPrice'],2)
             if stock.ticker in ticker_labels:
                 index = ticker_labels.index(stock.ticker)
-                ticker_amounts[index] += stock.amount
+                ticker_amounts[index] += int(stock.amount)
                 total_prices[index] += round(stock.amount*last_price,2)
             else:
                 ticker_labels.append(stock.ticker)
-                ticker_amounts.append(stock.amount)
+                ticker_amounts.append(int(stock.amount))
                 total_prices.append(round(stock.amount*last_price,2))
                 
                 
-        print(total_prices)
         for i in range(len(ticker_amounts)):
             if ticker_amounts[i] <= 0:
                 ticker_amounts.pop(i)
                 ticker_labels.pop(i)
                 total_prices.pop(i)
-
         overview = list(zip(ticker_labels, ticker_amounts, total_prices))
         df_overview = pd.DataFrame(overview[0:], columns=overview[0])
 

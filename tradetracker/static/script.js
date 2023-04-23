@@ -9,6 +9,5 @@ btn.onclick = function () {
     navbar_right.classList.toggle('active');
 };
 
-var cPass = document.getElementById("c-pass");
-cPass.textContent = cPass.textContent.replace("_", " ");
+
 
