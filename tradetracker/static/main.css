@@ -333,6 +333,7 @@
   margin-top: 1%;
   font-size: 1rem;
   word-wrap: break-word;
+  text-align: center;
 }
 #delete-btn:hover {
   cursor: pointer;
@@ -893,6 +894,13 @@ td, th {
   .earnings-elements {
     height: 80%;
     overflow: auto;
+  }
+  .article-date {
+    font-size: 16px;
+  }
+  .alert {
+    font-size: 35px;
+    top: 10%;
   }
 }
 @media only screen and (min-width: 1650px) {
